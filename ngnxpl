@@ -1,0 +1,59 @@
+---
+- name: Install NGINX Plus on RedHat 8
+  hosts: all
+  become: yes
+  vars:
+    nginx_repo_cert: "/path/to/nginx-repo.crt"
+    nginx_repo_key: "/path/to/nginx-repo.key"
+  
+  tasks:
+    - name: Install prerequisites
+      yum:
+        name:
+          - yum-utils
+          - device-mapper-persistent-data
+          - lvm2
+        state: present
+
+    - name: Create the /etc/ssl/nginx directory
+      file:
+        path: /etc/ssl/nginx
+        state: directory
+        mode: '0755'
+
+    - name: Copy NGINX Plus repository certificate
+      copy:
+        src: "{{ nginx_repo_cert }}"
+        dest: /etc/ssl/nginx/nginx-repo.crt
+        mode: '0644'
+
+    - name: Copy NGINX Plus repository key
+      copy:
+        src: "{{ nginx_repo_key }}"
+        dest: /etc/ssl/nginx/nginx-repo.key
+        mode: '0644'
+
+    - name: Add the NGINX Plus repository
+      yum_repository:
+        name: nginx-plus
+        description: NGINX Plus Repository
+        baseurl: https://pkgs.nginx.com/plus/rhel/8/x86_64/
+        sslverify: no
+        sslcacert: /etc/ssl/nginx/nginx-repo.crt
+        sslclientcert: /etc/ssl/nginx/nginx-repo.crt
+        sslclientkey: /etc/ssl/nginx/nginx-repo.key
+        gpgcheck: yes
+        enabled: yes
+        repo_gpgcheck: no
+        gpgkey: https://nginx.org/keys/nginx_signing.key
+
+    - name: Install NGINX Plus
+      yum:
+        name: nginx-plus
+        state: present
+
+    - name: Start and enable NGINX Plus service
+      systemd:
+        name: nginx
+        state: started
+        enabled: yes
