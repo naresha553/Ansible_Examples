@@ -1,0 +1,49 @@
+---
+- name: Install multiple versions of Java and .NET
+  hosts: all
+  become: yes
+  vars_files:
+    - versions.json
+
+  tasks:
+    - name: Ensure target directories exist
+      file:
+        path: "/opt/{{ item }}"
+        state: directory
+      loop:
+        - java
+        - dotnet
+
+    - name: Install Java tarballs
+      unarchive:
+        src: "{{ item.url }}"
+        dest: "/opt/java/java-{{ item.version }}"
+        remote_src: true
+      with_items: "{{ java_versions }}"
+      register: java_results
+
+    - name: Install .NET tarballs
+      unarchive:
+        src: "{{ item.url }}"
+        dest: "/opt/dotnet/dotnet-{{ item.version }}"
+        remote_src: true
+      with_items: "{{ dotnet_versions }}"
+      register: dotnet_results
+
+    - name: Display Java installation results
+      debug:
+        msg: >
+          Java version {{ item.item.version }} installation
+          {% if item.failed is defined and item.failed %} failed
+          {% else %} succeeded
+          {% endif %}
+      with_items: "{{ java_results.results }}"
+
+    - name: Display .NET installation results
+      debug:
+        msg: >
+          .NET version {{ item.item.version }} installation
+          {% if item.failed is defined and item.failed %} failed
+          {% else %} succeeded
+          {% endif %}
+      with_items: "{{ dotnet_results.results }}"
