@@ -1,3 +1,11 @@
+yum-config-manager --add-repo https://download.fedoraproject.org/pub/fedora/linux/releases/30/Everything/x86_64/os/
+sudo yum install gnumeric
+
+
+
+
+
+
 To install Gnumeric on RHEL 7, you'll need to follow a few steps, as it is not available in the default RHEL repositories. Below are the steps you can follow:
 
 ### 1. **Enable the EPEL Repository**
