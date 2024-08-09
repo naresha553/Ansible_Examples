@@ -1,0 +1,57 @@
+To install Gnumeric on RHEL 7, you'll need to follow a few steps, as it is not available in the default RHEL repositories. Below are the steps you can follow:
+
+### 1. **Enable the EPEL Repository**
+
+The Extra Packages for Enterprise Linux (EPEL) repository provides additional software packages, though Gnumeric isn't directly available in EPEL, enabling EPEL is still a good practice as it provides dependencies.
+
+```bash
+sudo yum install epel-release
+```
+
+### 2. **Install Required Dependencies**
+
+Before installing Gnumeric, you might need to install several dependencies manually:
+
+```bash
+sudo yum install goffice goffice-devel libgsf libgsf-devel gtk2 gtk2-devel
+```
+
+### 3. **Download Gnumeric RPM**
+
+Since Gnumeric is not directly available in the RHEL 7 repositories, you'll need to find an RPM package compatible with RHEL 7. You can download Gnumeric RPM from a reliable third-party repository such as [PKGS.org](https://pkgs.org) or [Fedora Copr](https://copr.fedorainfracloud.org/).
+
+Example command to download an RPM from a URL:
+
+```bash
+wget http://mirror.centos.org/centos/7/os/x86_64/Packages/gnumeric-1.12.50-2.el7.x86_64.rpm
+```
+
+### 4. **Install the RPM Package**
+
+After downloading the RPM package, install it using `yum`:
+
+```bash
+sudo yum localinstall gnumeric-1.12.50-2.el7.x86_64.rpm
+```
+
+This command will also handle installing any remaining dependencies.
+
+### 5. **Verify the Installation**
+
+Once installed, you can verify the installation by running:
+
+```bash
+gnumeric --version
+```
+
+This command should output the version of Gnumeric that was installed.
+
+### Troubleshooting
+
+- **Missing Dependencies**: If `yum` reports missing dependencies, you'll need to download and install those manually or look for them in the EPEL or other repositories.
+  
+- **Using Alternatives**: If you can't find a suitable RPM, consider using alternatives like LibreOffice for spreadsheet manipulation or Python libraries like `pandas`.
+
+### Summary
+
+Installing Gnumeric on RHEL 7 requires a bit of manual effort, including downloading the correct RPM and ensuring all dependencies are met. If you face any issues or need further assistance, feel free to ask!
