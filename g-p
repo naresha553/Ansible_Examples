@@ -2,7 +2,18 @@ yum-config-manager --add-repo https://download.fedoraproject.org/pub/fedora/linu
 sudo yum install gnumeric
 
 
-
+Download Gnumeric Source Code:
+bash
+Copy code
+wget https://download.gnome.org/sources/gnumeric/1.12/gnumeric-1.12.50.tar.xz
+tar -xf gnumeric-1.12.50.tar.xz
+cd gnumeric-1.12.50
+Compile and Install:
+bash
+Copy code
+./configure
+make
+sudo make install
 
 
 
